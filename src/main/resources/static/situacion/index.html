@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Situación Administrativa — Instituto Educativo</title>
+  <!-- Bootstrap 5 CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" />
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" />
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+  <!-- Estilos propios -->
+  <link rel="stylesheet" href="../situacion/situacion.css" />
+</head>
+<body>
+
+  <!-- ===== NAVBAR ===== -->
+  <nav class="navbar navbar-expand-lg navbar-dark navbar-universidad">
+    <div class="container">
+      <a class="navbar-brand d-flex align-items-center gap-2" href="../index.html">
+        <i class="fa-solid fa-graduation-cap fs-4"></i>
+        <span>Instituto Educativo</span>
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="mainNav">
+        <ul class="navbar-nav ms-auto gap-1">
+          <li class="nav-item"><a class="nav-link" href="../index.html"><i class="bi bi-house-door me-1"></i>Inicio</a></li>
+          <li class="nav-item"><a class="nav-link" href="../matriculas/index.html"><i class="bi bi-receipt me-1"></i>Matrículas</a></li>
+          <li class="nav-item"><a class="nav-link" href="../cuotas/index.html"><i class="bi bi-cash-stack me-1"></i>Cuotas</a></li>
+          <li class="nav-item"><a class="nav-link" href="../pagos/index.html"><i class="bi bi-credit-card me-1"></i>Pagos</a></li>
+          <li class="nav-item"><a class="nav-link active" href="index.html"><i class="bi bi-file-earmark-bar-graph me-1"></i>Situación</a></li>
+        </ul>
+        <div class="ms-lg-3 mt-2 mt-lg-0" id="navbar-user-info"></div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Page Header -->
+  <div class="py-4" style="background:var(--primary)">
+    <div class="container">
+      <h2 class="text-white fw-bold mb-0"><i class="bi bi-file-earmark-bar-graph-fill me-2"></i>Consulta de Situación Administrativa</h2>
+      <p class="text-white-50 mb-0 small">Estado de cuenta corriente, balance de cuotas impagas, pagos realizados y saldo deudor</p>
+    </div>
+  </div>
+
+  <main class="py-4">
+    <div class="container">
+      <div id="alert-container" class="mb-3"></div>
+
+      <!-- Buscador de Alumno -->
+      <div class="card mb-4">
+        <div class="card-header bg-primary-custom">
+          <i class="bi bi-search me-1"></i> Seleccionar Alumno para Consultar
+        </div>
+        <div class="card-body">
+          <div class="row g-3 align-items-end">
+            <div class="col-md-8">
+              <label class="form-label fw-semibold" for="select-alumno-consulta">Alumno</label>
+              <select id="select-alumno-consulta" class="form-select">
+                <option value="">Cargando alumnos...</option>
+              </select>
+            </div>
+            <div class="col-md-4">
+              <button class="btn btn-primary-custom w-100" id="btn-consultar-situacion">
+                <i class="bi bi-search me-1"></i> Consultar Estado de Cuenta
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Resultados (ocultos inicialmente) -->
+      <div id="resultado-situacion" class="d-none">
+
+        <!-- Ficha Resumen -->
+        <div class="card mb-4 border-0 shadow-sm">
+          <div class="card-body p-4">
+            <div class="d-flex flex-wrap justify-content-between align-items-center border-bottom pb-3 mb-4">
+              <div>
+                <h3 class="fw-bold mb-1" id="resumen-nombre-alumno">—</h3>
+                <p class="text-muted mb-0">DNI: <strong id="resumen-dni">—</strong> &bull; Legajo: <strong id="resumen-legajo">—</strong></p>
+              </div>
+              <div>
+                <span class="fs-5 badge p-2 px-3" id="resumen-badge-estado">—</span>
+              </div>
+            </div>
+
+            <!-- Métricas KPI -->
+            <div class="row g-3 text-center">
+              <div class="col-6 col-md-3">
+                <div class="p-3 bg-light rounded-3">
+                  <div class="text-muted small">Total Matrículas</div>
+                  <div class="fs-3 fw-bold" id="kpi-total-matriculas">0</div>
+                </div>
+              </div>
+              <div class="col-6 col-md-3">
+                <div class="p-3 bg-light rounded-3">
+                  <div class="text-muted small text-success">Cuotas Pagadas</div>
+                  <div class="fs-3 fw-bold text-success" id="kpi-cuotas-pagadas">0</div>
+                </div>
+              </div>
+              <div class="col-6 col-md-3">
+                <div class="p-3 bg-light rounded-3">
+                  <div class="text-muted small text-danger">Cuotas Pendientes / Vencidas</div>
+                  <div class="fs-3 fw-bold text-danger" id="kpi-cuotas-pendientes">0</div>
+                </div>
+              </div>
+              <div class="col-6 col-md-3">
+                <div class="p-3 bg-light rounded-3">
+                  <div class="text-muted small text-primary">Saldo Total Deudor</div>
+                  <div class="fs-3 fw-bold text-primary" id="kpi-saldo-total">$ 0.00</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Pestañas de Detalle -->
+        <div class="card">
+          <div class="card-header bg-white border-bottom-0 pt-3">
+            <ul class="nav nav-tabs card-header-tabs" id="myTab" role="tablist">
+              <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="tab-cuotas-btn" data-bs-toggle="tab" data-bs-target="#tab-cuotas" type="button" role="tab">
+                  <i class="bi bi-cash-stack me-1"></i>Detalle de Cuotas
+                </button>
+              </li>
+              <li class="nav-item" role="presentation">
+                <button class="nav-link" id="tab-matriculas-btn" data-bs-toggle="tab" data-bs-target="#tab-matriculas" type="button" role="tab">
+                  <i class="bi bi-receipt me-1"></i>Matrículas
+                </button>
+              </li>
+            </ul>
+          </div>
+          <div class="card-body p-0">
+            <div class="tab-content">
+              <!-- Tab Cuotas -->
+              <div class="tab-pane fade show active p-3" id="tab-cuotas" role="tabpanel">
+                <div class="table-responsive">
+                  <table class="table table-hover align-middle mb-0">
+                    <thead>
+                      <tr>
+                        <th>N° Cuota</th>
+                        <th>Matrícula</th>
+                        <th>Vencimiento</th>
+                        <th>Importe</th>
+                        <th>Estado</th>
+                        <th class="text-center">Acción</th>
+                      </tr>
+                    </thead>
+                    <tbody id="tbody-cuotas-alumno">
+                      <tr><td colspan="6" class="text-center py-4 text-muted">Sin datos</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <!-- Tab Matrículas -->
+              <div class="tab-pane fade p-3" id="tab-matriculas" role="tabpanel">
+                <div class="table-responsive">
+                  <table class="table table-hover align-middle mb-0">
+                    <thead>
+                      <tr>
+                        <th>ID Matrícula</th>
+                        <th>Ciclo Lectivo</th>
+                        <th>Fecha Emisión</th>
+                        <th>Importe</th>
+                        <th>Estado</th>
+                      </tr>
+                    </thead>
+                    <tbody id="tbody-matriculas-alumno">
+                      <tr><td colspan="5" class="text-center py-4 text-muted">Sin datos</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </main>
+
+  <footer>
+    <div class="container text-center">
+      <small>Instituto Educativo &mdash; Sistema de Gestión Universitaria</small>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="../js/api.js"></script>
+  <script>
+    let alumnosList = [];
+
+    async function cargarAlumnos() {
+      setLoading(true);
+      try {
+        alumnosList = await AlumnoAPI.listar();
+        const sel = document.getElementById('select-alumno-consulta');
+        sel.innerHTML = '<option value="">Seleccione un alumno...</option>';
+        alumnosList.forEach(a => {
+          sel.innerHTML += `<option value="${a.idAlumno}">${escapeHtml(a.apellido)}, ${escapeHtml(a.nombre)} (DNI: ${a.dni} — Legajo: ${a.legajo || '—'})</option>`;
+        });
+      } catch (err) {
+        showAlert(document.getElementById('alert-container'), err.message, 'danger');
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    async function consultarSituacion() {
+      const alumnoId = parseInt(document.getElementById('select-alumno-consulta').value);
+      if (!alumnoId) {
+        showAlert(document.getElementById('alert-container'), 'Por favor seleccione un alumno.', 'warning');
+        return;
+      }
+
+      setLoading(true);
+      try {
+        const [alumno, matriculas, todasCuotas] = await Promise.all([
+          AlumnoAPI.porId(alumnoId),
+          MatriculaAPI.porAlumno(alumnoId),
+          CuotaAPI.listar()
+        ]);
+
+        // Filtrar cuotas correspondientes a las matrículas de este alumno
+        const idsMats = matriculas.map(m => m.idMatricula);
+        const cuotasAlumno = todasCuotas.filter(c => c.matricula && idsMats.includes(c.matricula.idMatricula));
+
+        mostrarResumen(alumno, matriculas, cuotasAlumno);
+      } catch (err) {
+        showAlert(document.getElementById('alert-container'), err.message, 'danger');
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    function mostrarResumen(alumno, matriculas, cuotas) {
+      document.getElementById('resultado-situacion').classList.remove('d-none');
+      document.getElementById('resumen-nombre-alumno').textContent = `${alumno.apellido}, ${alumno.nombre}`;
+      document.getElementById('resumen-dni').textContent = alumno.dni;
+      document.getElementById('resumen-legajo').textContent = alumno.legajo || 'Sin legajo';
+
+      const totalMats = matriculas.length;
+      let pagadas = 0;
+      let pendientes = 0;
+      let saldoTotal = 0;
+
+      cuotas.forEach(c => {
+        if (c.estado === 'PAGADA') {
+          pagadas++;
+        } else if (c.estado === 'PENDIENTE' || c.estado === 'VENCIDA') {
+          pendientes++;
+          saldoTotal += Number(c.importe || 0);
+        }
+      });
+
+      document.getElementById('kpi-total-matriculas').textContent = totalMats;
+      document.getElementById('kpi-cuotas-pagadas').textContent = pagadas;
+      document.getElementById('kpi-cuotas-pendientes').textContent = pendientes;
+      document.getElementById('kpi-saldo-total').textContent = formatCurrency(saldoTotal);
+
+      const badgeEstado = document.getElementById('resumen-badge-estado');
+      if (pendientes === 0) {
+        badgeEstado.className = 'fs-5 badge bg-success p-2 px-3';
+        badgeEstado.innerHTML = '<i class="bi bi-check-circle me-1"></i>AL DÍA';
+      } else {
+        badgeEstado.className = 'fs-5 badge bg-danger p-2 px-3';
+        badgeEstado.innerHTML = `<i class="bi bi-exclamation-triangle me-1"></i>CON DEUDA (${pendientes} impaga${pendientes > 1 ? 's' : ''})`;
+      }
+
+      // Renderizar tabla cuotas
+      const tbodyCuotas = document.getElementById('tbody-cuotas-alumno');
+      if (cuotas.length === 0) {
+        renderEmpty(tbodyCuotas, 6, 'No hay cuotas generadas para este alumno');
+      } else {
+        tbodyCuotas.innerHTML = cuotas.map(c => {
+          let badgeCls = 'bg-secondary';
+          if (c.estado === 'PAGADA') badgeCls = 'bg-success';
+          else if (c.estado === 'PENDIENTE') badgeCls = 'bg-primary';
+          else if (c.estado === 'VENCIDA') badgeCls = 'bg-danger';
+          else if (c.estado === 'ANULADA') badgeCls = 'bg-dark';
+
+          const puedePagar = (c.estado === 'PENDIENTE' || c.estado === 'VENCIDA');
+
+          return `
+            <tr>
+              <td><strong>Cuota ${c.numeroCuota}</strong></td>
+              <td>Matrícula #${c.matricula ? c.matricula.idMatricula : '—'}</td>
+              <td>${formatDate(c.fechaVencimiento)}</td>
+              <td><strong>${formatCurrency(c.importe)}</strong></td>
+              <td><span class="badge ${badgeCls}">${escapeHtml(c.estado)}</span></td>
+              <td class="text-center">
+                ${puedePagar ? `
+                  <a href="../pagos/index.html?cuotaId=${c.idCuota}&importe=${c.importe}" class="btn btn-sm btn-outline-success">
+                    <i class="bi bi-credit-card me-1"></i>Pagar
+                  </a>
+                ` : `<span class="text-muted small">—</span>`}
+              </td>
+            </tr>
+          `;
+        }).join('');
+      }
+
+      // Renderizar tabla matriculas
+      const tbodyMats = document.getElementById('tbody-matriculas-alumno');
+      if (matriculas.length === 0) {
+        renderEmpty(tbodyMats, 5, 'No hay matrículas registradas para este alumno');
+      } else {
+        tbodyMats.innerHTML = matriculas.map(m => `
+          <tr>
+            <td><strong>#${m.idMatricula}</strong></td>
+            <td>${m.cicloLectivo ? m.cicloLectivo.anio : '—'}</td>
+            <td>${formatDate(m.fecha)}</td>
+            <td>${formatCurrency(m.importe)}</td>
+            <td><span class="badge ${m.estado === 'ACTIVA' ? 'bg-success' : 'bg-secondary'}">${escapeHtml(m.estado)}</span></td>
+          </tr>
+        `).join('');
+      }
+    }
+
+    document.getElementById('btn-consultar-situacion').addEventListener('click', consultarSituacion);
+
+    cargarAlumnos();
+  </script>
+</body>
+</html>

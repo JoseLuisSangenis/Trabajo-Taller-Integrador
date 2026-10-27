@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estructura Académica - Samuel Rojo</title>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-hover: #1d4ed8;
+            --bg: #f8fafc;
+            --card-bg: #ffffff;
+            --text: #1e293b;
+            --border: #e2e8f0;
+            --success: #16a34a;
+            --danger: #dc2626;
+        }
+        body { font-family: system-ui, -apple-system, sans-serif; background-color: var(--bg); color: var(--text); margin: 0; padding: 20px; }
+        .container { max-width: 1200px; margin: auto; }
+        h1 { color: #0f172a; margin-bottom: 5px; }
+        p.subtitle { color: #64748b; margin-top: 0; margin-bottom: 25px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); gap: 20px; margin-bottom: 30px; }
+        .card { background: var(--card-bg); padding: 20px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); border: 1px solid var(--border); }
+        h2 { font-size: 1.15em; margin-top: 0; color: #1e293b; border-bottom: 2px solid var(--bg); padding-bottom: 8px; }
+        label { display: block; margin-top: 10px; font-weight: 600; font-size: 0.85em; color: #475569; }
+        input, select, button { width: 100%; padding: 9px 12px; margin-top: 4px; border-radius: 6px; border: 1px solid var(--border); box-sizing: border-box; font-size: 0.95em; }
+        button { background-color: var(--primary); color: white; border: none; cursor: pointer; font-weight: 600; margin-top: 15px; transition: background 0.2s; }
+        button:hover { background-color: var(--primary-hover); }
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; background: white; border-radius: 8px; overflow: hidden; }
+        th, td { padding: 10px 12px; text-align: left; border-bottom: 1px solid var(--border); font-size: 0.9em; }
+        th { background: #f1f5f9; font-size: 0.8em; text-transform: uppercase; color: #64748b; font-weight: 700; }
+        .btn-danger { background-color: var(--danger); padding: 5px 10px; width: auto; font-size: 0.8em; margin: 0; }
+        .btn-sm { background-color: #0284c7; padding: 5px 10px; width: auto; font-size: 0.8em; margin: 0; }
+        .alert { padding: 12px; border-radius: 6px; margin-bottom: 20px; display: none; font-weight: 500; }
+        .alert-success { background: #dcfce7; color: var(--success); border: 1px solid #bbf7d0; }
+        .alert-error { background: #fee2e2; color: var(--danger); border: 1px solid #fecaca; }
+        .badge { display: inline-block; padding: 2px 8px; border-radius: 12px; font-size: 0.75em; font-weight: 600; }
+        .badge-active { background: #dcfce7; color: #166534; }
+        .badge-inactive { background: #fee2e2; color: #991b1b; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Gestión de Estructura Académica</h1>
+    <p class="subtitle">Módulo del Integrante 2(Samuel Rojo) : Ciclos Lectivos, Cursos, Materias y Asignación Curso-Materia</p>
+
+    <div id="mensajeAlerta" class="alert"></div>
+
+    <!-- 4 FORMULARIOS: 1 POR CADA ENTIDAD TUYA -->
+    <div class="grid">
+        <!-- 1. Ciclo Lectivo -->
+        <div class="card">
+            <h2>1. Ciclo Lectivo</h2>
+            <form id="formCiclo">
+                <label>Año Académico</label>
+                <input type="number" id="cicloAnio" placeholder="Ej: 2026" required min="2020">
+                <label>Fecha de Inicio</label>
+                <input type="date" id="cicloInicio" required>
+                <label>Fecha de Fin</label>
+                <input type="date" id="cicloFin" required>
+                <button type="submit">Guardar Ciclo</button>
+            </form>
+        </div>
+
+        <!-- 2. Curso -->
+        <div class="card">
+            <h2>2. Curso / División</h2>
+            <form id="formCurso">
+                <label>Ciclo Lectivo</label>
+                <select id="cursoCiclo" required><option value="">Cargando ciclos...</option></select>
+                <label>Año de Cursado</label>
+                <input type="number" id="cursoAnioCursado" placeholder="Ej: 1 (para 1° Año)" required min="1" max="7">
+                <label>División</label>
+                <input type="text" id="cursoDivision" placeholder="Ej: A, B o 1ra" required>
+                <label>Capacidad Máxima</label>
+                <input type="number" id="cursoCapacidad" value="30" required min="1">
+                <button type="submit">Guardar Curso</button>
+            </form>
+        </div>
+
+        <!-- 3. Materia -->
+        <div class="card">
+            <h2>3. Catálogo de Materia</h2>
+            <form id="formMateria">
+                <label>Nombre de la Materia</label>
+                <input type="text" id="materiaNombre" placeholder="Ej: Matemática I" required>
+                <label>Descripción</label>
+                <input type="text" id="materiaDescripcion" placeholder="Ej: Asignatura anual">
+                <button type="submit">Guardar Materia</button>
+            </form>
+        </div>
+
+        <!-- 4. CursoMateria (Asignación) -->
+        <div class="card">
+            <h2>4. Asignar Materia a Curso</h2>
+            <form id="formCursoMateria">
+                <label>Seleccionar Curso</label>
+                <select id="cmCurso" required><option value="">Cargando cursos...</option></select>
+                <label>Seleccionar Materia</label>
+                <select id="cmMateria" required><option value="">Cargando materias...</option></select>
+                <button type="submit">Asignar al Curso</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- TABLAS DE CONSULTA -->
+    <div class="grid" style="grid-template-columns: 1fr 1fr;">
+        <!-- Tabla Cursos -->
+        <div class="card">
+            <h2>Listado de Cursos Registrados</h2>
+            <table>
+                <thead>
+                <tr>
+                    <th>Ciclo</th>
+                    <th>Curso</th>
+                    <th>Cupo</th>
+                    <th>Materias</th>
+                </tr>
+                </thead>
+                <tbody id="tablaCursos"></tbody>
+            </table>
+        </div>
+
+        <!-- Tabla Materias asignadas al curso seleccionado -->
+        <div class="card">
+            <h2 id="tituloMateriasCurso">Materias del Curso (Seleccione uno)</h2>
+            <table>
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Materia</th>
+                    <th>Docente Asignado</th>
+                </tr>
+                </thead>
+                <tbody id="tablaMateriasCurso">
+                <tr><td colspan="3" style="text-align:center; color:#94a3b8;">Haga clic en "Ver Materias" en un curso de la izquierda</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Tabla Catálogo General de Materias -->
+    <div class="card" style="margin-top: 20px;">
+        <h2>Catálogo General de Materias (Con Baja Lógica)</h2>
+        <table>
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Materia</th>
+                <th>Descripción</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+            </tr>
+            </thead>
+            <tbody id="tablaMaterias"></tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    const API = 'http://localhost:8080/api';
+
+    function mostrarMensaje(texto, esError = false) {
+        const el = document.getElementById('mensajeAlerta');
+        el.className = 'alert ' + (esError ? 'alert-error' : 'alert-success');
+        el.innerText = texto;
+        el.style.display = 'block';
+        setTimeout(() => el.style.display = 'none', 4500);
+    }
+    // Función asíncrona para obtener y dibujar los cursos en la tabla HTML
+    async function cargarCiclos() {
+        try {  // Petición HTTP GET al endpoint /api/cursos
+            const res = await fetch(`${API}/ciclos`);
+            const ciclos = await res.json();
+            const select = document.getElementById('cursoCiclo');
+            select.innerHTML = '<option value="">Seleccione Ciclo</option>';
+            ciclos.forEach(c => select.innerHTML += `<option value="${c.idCiclo}">${c.anio} (${c.estado})</option>`);
+        } catch(e) { console.error(e); }
+    }
+
+    async function cargarCursos() {
+        try {
+            const res = await fetch(`${API}/cursos`);
+            const cursos = await res.json(); // Parsea la respuesta a formato JSON
+
+            // Llenar select de asignación
+            const selectCM = document.getElementById('cmCurso');
+            selectCM.innerHTML = '<option value="">Seleccione Curso</option>';
+            cursos.forEach(c => selectCM.innerHTML += `<option value="${c.idCurso}">${c.anioCursado}° "${c.division}" (${c.cicloLectivo?.anio || ''})</option>`);
+
+            // Llenar tabla cursos
+            const tbody = document.getElementById('tablaCursos');
+            tbody.innerHTML = cursos.map(c => `
+                <tr>
+                    <td>${c.cicloLectivo ? c.cicloLectivo.anio : '-'}</td>
+                    <td><strong>${c.anioCursado}° Año "${c.division}"</strong></td>
+                    <td>${c.capacidadMaxima} alumnos</td>
+                    <td>
+                        <button class="btn-sm" onclick="verMateriasCurso(${c.idCurso}, '${c.anioCursado}° ${c.division}')">Ver Materias</button>
+                    </td>
+                </tr>
+            `).join('');
+        } catch(e) { console.error(e); }
+    }
+
+    async function cargarMaterias() {
+        try {
+            const res = await fetch(`${API}/materias?soloActivas=false`);
+            const materias = await res.json();
+
+            // Llenar select de asignación (solo activas)
+            const selectCM = document.getElementById('cmMateria');
+            selectCM.innerHTML = '<option value="">Seleccione Materia</option>';
+            materias.filter(m => m.estado === 'ACTIVO').forEach(m => selectCM.innerHTML += `<option value="${m.idMateria}">${m.nombre}</option>`);
+
+            // Llenar tabla general
+            const tbody = document.getElementById('tablaMaterias');
+            tbody.innerHTML = materias.map(m => `
+                <tr>
+                    <td>${m.idMateria}</td>
+                    <td><strong>${m.nombre}</strong></td>
+                    <td>${m.descripcion || '-'}</td>
+                    <td>
+                        <span class="badge ${m.estado === 'ACTIVO' ? 'badge-active' : 'badge-inactive'}">
+                            ${m.estado}
+                        </span>
+                    </td>
+                    <td>
+                        ${m.estado === 'ACTIVO' ? `<button class="btn-danger" onclick="bajaMateria(${m.idMateria})">Baja Lógica</button>` : '<span style="color:#94a3b8">Inactiva</span>'}
+                    </td>
+                </tr>
+            `).join('');
+        } catch(e) { console.error(e); }
+    }
+
+    async function verMateriasCurso(idCurso, nombreCurso) {
+        document.getElementById('tituloMateriasCurso').innerText = `Materias de: ${nombreCurso}`;
+        try {
+            const res = await fetch(`${API}/cursos/${idCurso}/materias`);
+            const materias = await res.json();
+            const tbody = document.getElementById('tablaMateriasCurso');
+            if (materias.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="3" style="text-align:center; color:#94a3b8;">No tiene materias asignadas todavía.</td></tr>`;
+                return;
+            }
+            tbody.innerHTML = materias.map(cm => `
+                <tr>
+                    <td>${cm.idCursoMateria}</td>
+                    <td><strong>${cm.materia ? cm.materia.nombre : '-'}</strong></td>
+                    <td>${cm.docente ? cm.docente.apellido + ', ' + cm.docente.nombre : '<em>Sin asignar</em>'}</td>
+                </tr>
+            `).join('');
+        } catch(e) { console.error(e); }
+    }
+
+    async function bajaMateria(id) {
+        if (!confirm('¿Desea dar de baja lógica esta materia?')) return;
+        const res = await fetch(`${API}/materias/${id}`, { method: 'DELETE' });
+        if (res.ok) {
+            mostrarMensaje('Materia dada de baja lógica exitosamente');
+            cargarMaterias();
+        }
+    }
+
+    // Formularios
+    document.getElementById('formCiclo').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const data = {
+            anio: parseInt(document.getElementById('cicloAnio').value),
+            fechaInicio: document.getElementById('cicloInicio').value,
+            fechaFin: document.getElementById('cicloFin').value
+        };
+        const res = await fetch(`${API}/ciclos`, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(data)
+        });
+        if (res.ok) {
+            mostrarMensaje('Ciclo lectivo creado con éxito');
+            e.target.reset();
+            cargarCiclos();
+        } else {
+            const err = await res.json();
+            mostrarMensaje(err.error || 'Error al guardar ciclo', true);
+        }
+    });
+
+    document.getElementById('formCurso').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const data = {
+            idCiclo: parseInt(document.getElementById('cursoCiclo').value),
+            anioCursado: parseInt(document.getElementById('cursoAnioCursado').value),
+            division: document.getElementById('cursoDivision').value,
+            capacidadMaxima: parseInt(document.getElementById('cursoCapacidad').value)
+        };
+        const res = await fetch(`${API}/cursos`, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(data)
+        });
+        if (res.ok) {
+            mostrarMensaje('Curso registrado con éxito');
+            e.target.reset();
+            cargarCursos();
+        } else {
+            const err = await res.json();
+            mostrarMensaje(err.error || 'Error al registrar curso', true);
+        }
+    });
+
+    document.getElementById('formMateria').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const data = {
+            nombre: document.getElementById('materiaNombre').value,
+            descripcion: document.getElementById('materiaDescripcion').value
+        };
+        const res = await fetch(`${API}/materias`, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(data)
+        });
+        if (res.ok) {
+            mostrarMensaje('Materia creada con éxito');
+            e.target.reset();
+            cargarMaterias();
+        } else {
+            const err = await res.json();
+            mostrarMensaje(err.error || 'Error al crear materia', true);
+        }
+    });
+
+    // Evento Formulario 4: CursoMateria
+    document.getElementById('formCursoMateria').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const idCurso = document.getElementById('cmCurso').value;
+        const idMateria = document.getElementById('cmMateria').value;
+
+        const res = await fetch(`${API}/cursos/${idCurso}/materias`, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ idCurso: parseInt(idCurso), idMateria: parseInt(idMateria) })
+        });
+        if (res.ok) {
+            mostrarMensaje('Materia asignada al curso con éxito');
+            e.target.reset();
+            cargarCursos();
+        } else {
+            const err = await res.json();
+            mostrarMensaje(err.error || 'Error al asignar materia al curso', true);
+        }
+    });
+
+    // Carga inicial
+    cargarCiclos();
+    cargarCursos();
+    cargarMaterias();
+</script>
+
+</body>
+</html>

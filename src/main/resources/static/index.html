@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Instituto Educativo — Sistema Integral de Gestión Universitaria</title>
+
+  <!-- Bootstrap 5 CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" />
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" />
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+  <!-- Estilos propios -->
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+
+  <!-- ===== NAVBAR ===== -->
+  <nav class="navbar navbar-expand-lg navbar-dark navbar-universidad sticky-top">
+    <div class="container">
+      <a class="navbar-brand d-flex align-items-center gap-2" href="index.html">
+        <i class="fa-solid fa-graduation-cap fs-4"></i>
+        <span>Instituto Educativo</span>
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="mainNav">
+        <ul class="navbar-nav ms-auto gap-1">
+          <li class="nav-item">
+            <a class="nav-link active" href="index.html">
+              <i class="bi bi-house-door me-1"></i>Inicio
+            </a>
+          </li>
+
+          <!-- Dropdown Administración -->
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+              <i class="bi bi-gear me-1"></i>Administración
+            </a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="alumnos/index.html"><i class="bi bi-people me-2"></i>Gestión de Alumnos</a></li>
+              <li><a class="dropdown-item" href="docentes/index.html"><i class="bi bi-person-badge me-2"></i>Gestión de Docentes</a></li>
+              <li><a class="dropdown-item" href="cursos/index.html"><i class="bi bi-mortarboard me-2"></i>Gestión de Cursos</a></li>
+              <li><a class="dropdown-item" href="materias/index.html"><i class="bi bi-book me-2"></i>Gestión de Materias</a></li>
+            </ul>
+          </li>
+
+          <!-- Dropdown Académico -->
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+              <i class="bi bi-mortarboard me-1"></i>Académico
+            </a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="inscripciones/index.html"><i class="bi bi-person-plus me-2"></i>Inscripciones</a></li>
+              <li><a class="dropdown-item" href="asistencias/index.html"><i class="bi bi-calendar-check me-2"></i>Asistencias</a></li>
+              <li><a class="dropdown-item" href="evaluaciones/index.html"><i class="bi bi-journal-text me-2"></i>Evaluaciones</a></li>
+              <li><a class="dropdown-item" href="calificaciones/index.html"><i class="bi bi-star-half me-2"></i>Calificaciones</a></li>
+            </ul>
+          </li>
+
+          <!-- Dropdown Administrativo -->
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+              <i class="bi bi-cash-coin me-1"></i>Administrativo
+            </a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="matriculas/index.html"><i class="bi bi-receipt me-2"></i>Matrículas</a></li>
+              <li><a class="dropdown-item" href="cuotas/index.html"><i class="bi bi-cash-stack me-2"></i>Cuotas</a></li>
+              <li><a class="dropdown-item" href="pagos/index.html"><i class="bi bi-credit-card me-2"></i>Registro de Pagos</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" href="situacion/index.html"><i class="bi bi-file-earmark-bar-graph me-2"></i>Situación Administrativa</a></li>
+            </ul>
+          </li>
+
+          <!-- Portal Alumno -->
+          <li class="nav-item">
+            <a class="nav-link" href="mi-situacion/index.html">
+              <i class="bi bi-person-workspace me-1"></i>Mi Portal
+            </a>
+          </li>
+        </ul>
+        <div class="ms-lg-3 mt-2 mt-lg-0" id="navbar-user-info"></div>
+      </div>
+    </div>
+  </nav>
+
+  <main>
+    <!-- ===== HERO SECTION ===== -->
+    <section class="hero-section">
+      <div class="container text-center">
+        <i class="fa-solid fa-university fa-3x mb-3 opacity-75"></i>
+        <h1 class="mb-3">Sistema de Gestión Universitaria</h1>
+        <p class="lead mb-4 mx-auto" style="max-width:700px">
+          Plataforma integral para la administración académica, cuerpo docente, nómina de alumnos,
+          evaluaciones, calificaciones y cuenta corriente de pagos.
+        </p>
+        <div class="d-flex flex-wrap justify-content-center gap-2">
+          <a href="alumnos/index.html" class="btn btn-light btn-lg px-4 fw-semibold">
+            <i class="bi bi-people me-2 text-primary"></i>Alumnos
+          </a>
+          <a href="inscripciones/index.html" class="btn btn-outline-light btn-lg px-4 fw-semibold">
+            <i class="bi bi-person-plus me-2"></i>Inscripciones
+          </a>
+          <a href="situacion/index.html" class="btn btn-outline-light btn-lg px-4 fw-semibold">
+            <i class="bi bi-file-earmark-bar-graph me-2"></i>Situación Administrativa
+          </a>
+          <a href="mi-situacion/index.html" class="btn btn-warning text-dark btn-lg px-4 fw-bold">
+            <i class="bi bi-person-workspace me-2"></i>Portal Alumno
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== SECCIÓN 1: ADMINISTRACIÓN ===== -->
+    <section class="py-5">
+      <div class="container">
+        <div class="d-flex align-items-center mb-4">
+          <div class="bg-primary text-white p-2 rounded-3 me-3"><i class="bi bi-shield-check fs-4"></i></div>
+          <div>
+            <h3 class="fw-bold mb-0" style="color:var(--primary)">1. Administración General</h3>
+            <p class="text-muted small mb-0">Gestión de recursos principales, personas y estructura educativa</p>
+          </div>
+        </div>
+
+        <div class="row g-4">
+          <!-- Alumnos -->
+          <div class="col-sm-6 col-lg-3">
+            <a class="quick-card" href="alumnos/index.html">
+              <div class="card h-100 p-4 text-center">
+                <div class="icon-wrap mx-auto"><i class="bi bi-people-fill"></i></div>
+                <h5 class="fw-bold mb-2 text-primary">Alumnos</h5>
+                <p class="text-muted small mb-0">Nómina, altas, bajas, datos de contacto y estado académico.</p>
+              </div>
+            </a>
+          </div>
+
+          <!-- Docentes -->
+          <div class="col-sm-6 col-lg-3">
+            <a class="quick-card" href="docentes/index.html">
+              <div class="card h-100 p-4 text-center">
+                <div class="icon-wrap mx-auto"><i class="bi bi-person-badge-fill"></i></div>
+                <h5 class="fw-bold mb-2 text-primary">Docentes</h5>
+                <p class="text-muted small mb-0">Cuerpo docente, especialidades, asignaciones y contacto.</p>
+              </div>
+            </a>
+          </div>
+
+          <!-- Cursos -->
+          <div class="col-sm-6 col-lg-3">
+            <a class="quick-card" href="cursos/index.html">
+              <div class="card h-100 p-4 text-center">
+                <div class="icon-wrap mx-auto"><i class="bi bi-mortarboard-fill"></i></div>
+                <h5 class="fw-bold mb-2 text-primary">Cursos</h5>
+                <p class="text-muted small mb-0">Divisiones por ciclo, control de cupos máximos y asignación de materias.</p>
+              </div>
+            </a>
+          </div>
+
+          <!-- Materias -->
+          <div class="col-sm-6 col-lg-3">
+            <a class="quick-card" href="materias/index.html">
+              <div class="card h-100 p-4 text-center">
+                <div class="icon-wrap mx-auto"><i class="bi bi-book-fill"></i></div>
+                <h5 class="fw-bold mb-2 text-primary">Materias</h5>
+                <p class="text-muted small mb-0">Catálogo de asignaturas con soporte para baja lógica (RNF16).</p>
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== SECCIÓN 2: ACADÉMICO ===== -->
+    <section class="py-5 bg-white border-top border-bottom">
+      <div class="container">
+        <div class="d-flex align-items-center mb-4">
+          <div class="bg-primary text-white p-2 rounded-3 me-3"><i class="bi bi-journal-check fs-4"></i></div>
+          <div>
+            <h3 class="fw-bold mb-0" style="color:var(--primary)">2. Módulo Académico</h3>
+            <p class="text-muted small mb-0">Inscripciones, evaluaciones, calificaciones y registro diario de asistencias</p>
+          </div>
+        </div>
+
+        <div class="row g-4">
+          <!-- Inscripciones -->
+          <div class="col-sm-6 col-lg-3">
+            <a class="quick-card" href="inscripciones/index.html">
+              <div class="card h-100 p-4 text-center">
+                <div class="icon-wrap mx-auto"><i class="bi bi-person-plus-fill"></i></div>
+                <h5 class="fw-bold mb-2 text-primary">Inscripciones</h5>
+                <p class="text-muted small mb-0">Inscripción a cursos, control de cupos (RN02) y anulación.</p>
+              </div>
+            </a>
+          </div>
+
+          <!-- Asistencias -->
+          <div class="col-sm-6 col-lg-3">
+            <a class="quick-card" href="asistencias/index.html">
+              <div class="card h-100 p-4 text-center">
+                <div class="icon-wrap mx-auto"><i class="bi bi-calendar-check-fill"></i></div>
+                <h5 class="fw-bold mb-2 text-primary">Asistencias</h5>
+                <p class="text-muted small mb-0">Control diario por clase, historial y porcentaje de presencia.</p>
+              </div>
+            </a>
+          </div>
+
+          <!-- Evaluaciones -->
+          <div class="col-sm-6 col-lg-3">
+            <a class="quick-card" href="evaluaciones/index.html">
+              <div class="card h-100 p-4 text-center">
+                <div class="icon-wrap mx-auto"><i class="bi bi-journal-text"></i></div>
+                <h5 class="fw-bold mb-2 text-primary">Evaluaciones</h5>
+                <p class="text-muted small mb-0">Parciales, finales y TPs asociados al docente y la materia.</p>
+              </div>
+            </a>
+          </div>
+
+          <!-- Calificaciones -->
+          <div class="col-sm-6 col-lg-3">
+            <a class="quick-card" href="calificaciones/index.html">
+              <div class="card h-100 p-4 text-center">
+                <div class="icon-wrap mx-auto"><i class="bi bi-star-half"></i></div>
+                <h5 class="fw-bold mb-2 text-primary">Calificaciones</h5>
+                <p class="text-muted small mb-0">Carga de notas (1 a 10), una nota única por evaluación (RN15).</p>
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== SECCIÓN 3: ADMINISTRATIVO Y FINANCIERO ===== -->
+    <section class="py-5">
+      <div class="container">
+        <div class="d-flex align-items-center mb-4">
+          <div class="bg-primary text-white p-2 rounded-3 me-3"><i class="bi bi-cash-stack fs-4"></i></div>
+          <div>
+            <h3 class="fw-bold mb-0" style="color:var(--primary)">3. Módulo Administrativo</h3>
+            <p class="text-muted small mb-0">Matrículas anuales, planes de cuotas, cobranzas y estado de cuenta</p>
+          </div>
+        </div>
+
+        <div class="row g-4">
+          <!-- Matrículas -->
+          <div class="col-sm-6 col-lg-3">
+            <a class="quick-card" href="matriculas/index.html">
+              <div class="card h-100 p-4 text-center">
+                <div class="icon-wrap mx-auto"><i class="bi bi-receipt"></i></div>
+                <h5 class="fw-bold mb-2 text-primary">Matrículas</h5>
+                <p class="text-muted small mb-0">Emisión de matrícula única por alumno y ciclo (RN03) y estados.</p>
+              </div>
+            </a>
+          </div>
+
+          <!-- Cuotas -->
+          <div class="col-sm-6 col-lg-3">
+            <a class="quick-card" href="cuotas/index.html">
+              <div class="card h-100 p-4 text-center">
+                <div class="icon-wrap mx-auto"><i class="bi bi-cash-stack"></i></div>
+                <h5 class="fw-bold mb-2 text-primary">Cuotas</h5>
+                <p class="text-muted small mb-0">Generación correlativa mensual (RN05) y control de vencimientos (RN07).</p>
+              </div>
+            </a>
+          </div>
+
+          <!-- Registro de Pagos -->
+          <div class="col-sm-6 col-lg-3">
+            <a class="quick-card" href="pagos/index.html">
+              <div class="card h-100 p-4 text-center">
+                <div class="icon-wrap mx-auto"><i class="bi bi-credit-card-fill"></i></div>
+                <h5 class="fw-bold mb-2 text-primary">Registro de Pagos</h5>
+                <p class="text-muted small mb-0">Cobro de cuotas, validación de saldos (RN09) y medios de pago (RN11).</p>
+              </div>
+            </a>
+          </div>
+
+          <!-- Consulta Situación -->
+          <div class="col-sm-6 col-lg-3">
+            <a class="quick-card" href="situacion/index.html">
+              <div class="card h-100 p-4 text-center">
+                <div class="icon-wrap mx-auto"><i class="bi bi-file-earmark-bar-graph-fill"></i></div>
+                <h5 class="fw-bold mb-2 text-primary">Situación Administrativa</h5>
+                <p class="text-muted small mb-0">Resumen integral: balance al día, deuda exigible y cuotas del alumno.</p>
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== SECCIÓN 4: PORTAL ALUMNO DESTACADO ===== -->
+    <section class="py-5 bg-white border-top">
+      <div class="container">
+        <div class="card bg-light border-primary p-4 p-md-5">
+          <div class="row align-items-center">
+            <div class="col-lg-8">
+              <div class="d-flex align-items-center gap-2 mb-2">
+                <span class="badge bg-warning text-dark fw-bold">Autogestión</span>
+                <span class="text-muted small">Vista exclusiva para estudiantes</span>
+              </div>
+              <h2 class="fw-bold text-primary mb-2">Portal del Alumno: Datos y Situación Académica</h2>
+              <p class="text-secondary mb-3">
+                Accede a tu ficha personal, consulta tus materias inscriptas, promedios de exámenes rendidos,
+                asistencia por materia y estado de tus cuotas en un solo lugar.
+              </p>
+              <a href="mi-situacion/index.html" class="btn btn-primary-custom btn-lg fw-semibold">
+                <i class="bi bi-person-workspace me-2"></i>Ir a Mi Situación Académica
+              </a>
+            </div>
+            <div class="col-lg-4 text-center mt-4 mt-lg-0">
+              <i class="bi bi-mortarboard display-1 text-primary opacity-50"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ===== FOOTER ===== -->
+  <footer>
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-md-6 mb-3 mb-md-0">
+          <div class="d-flex align-items-center gap-2 mb-1">
+            <i class="fa-solid fa-graduation-cap fs-5"></i>
+            <strong>Instituto Educativo</strong>
+          </div>
+          <small>Sistema de Gestión Universitaria — Taller Integrador 3</small>
+        </div>
+        <div class="col-md-6 text-md-end">
+          <small>
+            Backend: <code>http://localhost:8080/api</code> &nbsp;·&nbsp;
+            Spring Boot &nbsp;·&nbsp; Bootstrap 5
+          </small>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Bootstrap 5 JS Bundle -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="js/api.js"></script>
+</body>
+</html>

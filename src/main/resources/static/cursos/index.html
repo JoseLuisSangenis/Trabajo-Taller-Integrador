@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gestión de Cursos — Instituto Educativo</title>
+  <!-- Bootstrap 5 CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" />
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" />
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+  <!-- Estilos propios -->
+  <link rel="stylesheet" href="../cursos/cursos.css" />
+</head>
+<body>
+
+  <!-- ===== NAVBAR ===== -->
+  <nav class="navbar navbar-expand-lg navbar-dark navbar-universidad">
+    <div class="container">
+      <a class="navbar-brand d-flex align-items-center gap-2" href="../index.html">
+        <i class="fa-solid fa-graduation-cap fs-4"></i>
+        <span>Instituto Educativo</span>
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="mainNav">
+        <ul class="navbar-nav ms-auto gap-1">
+          <li class="nav-item"><a class="nav-link" href="../index.html"><i class="bi bi-house-door me-1"></i>Inicio</a></li>
+          <li class="nav-item"><a class="nav-link" href="../alumnos/index.html"><i class="bi bi-people me-1"></i>Alumnos</a></li>
+          <li class="nav-item"><a class="nav-link" href="../docentes/index.html"><i class="bi bi-person-badge me-1"></i>Docentes</a></li>
+          <li class="nav-item"><a class="nav-link active" href="index.html"><i class="bi bi-mortarboard me-1"></i>Cursos</a></li>
+          <li class="nav-item"><a class="nav-link" href="../materias/index.html"><i class="bi bi-book me-1"></i>Materias</a></li>
+          <li class="nav-item"><a class="nav-link" href="../inscripciones/index.html"><i class="bi bi-person-plus me-1"></i>Inscripciones</a></li>
+          <li class="nav-item"><a class="nav-link" href="../matriculas/index.html"><i class="bi bi-receipt me-1"></i>Matrículas</a></li>
+        </ul>
+        <div class="ms-lg-3 mt-2 mt-lg-0" id="navbar-user-info"></div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Page Header -->
+  <div class="py-4" style="background:var(--primary)">
+    <div class="container d-flex justify-content-between align-items-center">
+      <div>
+        <h2 class="text-white fw-bold mb-0"><i class="bi bi-mortarboard-fill me-2"></i>Gestión de Cursos y Divisiones</h2>
+        <p class="text-white-50 mb-0 small">Apertura de cursos, control de cupos (RN02) y asignación de materias con docentes</p>
+      </div>
+      <div class="d-flex gap-2">
+        <button class="btn btn-outline-light fw-semibold" id="btn-nuevo-ciclo">
+          <i class="bi bi-calendar-plus me-1"></i> Nuevo Ciclo
+        </button>
+        <button class="btn btn-light fw-semibold" id="btn-nuevo-curso">
+          <i class="bi bi-plus-circle-fill me-1 text-primary"></i> Nuevo Curso
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <main class="py-4">
+    <div class="container">
+      <div id="alert-container" class="mb-3"></div>
+
+      <div class="row g-4">
+        <!-- Columna Izquierda: Cursos -->
+        <div class="col-lg-7">
+          <div class="card h-100">
+            <div class="card-header bg-primary-custom d-flex justify-content-between align-items-center">
+              <span><i class="bi bi-list-columns-reverse me-2"></i>Cursos Registrados</span>
+              <div style="max-width: 200px;">
+                <select id="filtro-ciclo" class="form-select form-select-sm text-dark">
+                  <option value="">Todos los ciclos</option>
+                </select>
+              </div>
+            </div>
+            <div class="card-body p-0">
+              <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                  <thead>
+                    <tr>
+                      <th>Ciclo</th>
+                      <th>Curso / División</th>
+                      <th>Capacidad</th>
+                      <th class="text-center">Acciones</th>
+                    </tr>
+                  </thead>
+                  <tbody id="tbody-cursos">
+                    <tr><td colspan="4" class="text-center py-4 text-muted">Cargando cursos...</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Columna Derecha: Materias asignadas al curso seleccionado -->
+        <div class="col-lg-5">
+          <div class="card h-100">
+            <div class="card-header bg-primary-custom d-flex justify-content-between align-items-center">
+              <span><i class="bi bi-diagram-3-fill me-2"></i>Materias del Curso</span>
+              <button class="btn btn-sm btn-light text-primary fw-semibold d-none" id="btn-asignar-materia">
+                <i class="bi bi-plus-lg me-1"></i>Asignar
+              </button>
+            </div>
+            <div class="card-body">
+              <div id="curso-seleccionado-info" class="alert alert-secondary py-2 small mb-3">
+                <i class="bi bi-info-circle me-1"></i>Seleccione un curso de la izquierda para ver y gestionar sus materias asignadas.
+              </div>
+
+              <div class="table-responsive">
+                <table class="table table-sm table-hover align-middle mb-0">
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>Materia</th>
+                      <th>Docente Asignado</th>
+                    </tr>
+                  </thead>
+                  <tbody id="tbody-materias-curso">
+                    <tr><td colspan="3" class="text-center py-4 text-muted">Ningún curso seleccionado</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Modal Nuevo Curso -->
+  <div class="modal fade" id="modal-curso" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header bg-primary text-white">
+          <h5 class="modal-title"><i class="bi bi-mortarboard-fill me-2"></i>Nuevo Curso / División</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+        </div>
+        <form id="form-curso" novalidate>
+          <div class="modal-body p-4">
+            <div id="modal-curso-alert"></div>
+
+            <div class="mb-3">
+              <label class="form-label fw-semibold" for="curso-ciclo">Ciclo Lectivo <span class="text-danger">*</span></label>
+              <select id="curso-ciclo" class="form-select" required>
+                <option value="">Seleccione ciclo lectivo...</option>
+              </select>
+              <div class="invalid-feedback">Debe seleccionar un ciclo lectivo.</div>
+            </div>
+
+            <div class="row g-3 mb-3">
+              <div class="col-md-6">
+                <label class="form-label fw-semibold" for="curso-anio">Año de Cursado <span class="text-danger">*</span></label>
+                <input type="number" id="curso-anio" class="form-control" placeholder="1 a 7" min="1" max="7" required />
+                <div class="invalid-feedback">Indique año de 1 a 7.</div>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label fw-semibold" for="curso-division">División <span class="text-danger">*</span></label>
+                <input type="text" id="curso-division" class="form-control" placeholder="Ej: A, B o 1ra" maxlength="10" required />
+                <div class="invalid-feedback">Indique la división.</div>
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label fw-semibold" for="curso-capacidad">Capacidad Máxima (Cupo) <span class="text-danger">*</span></label>
+              <input type="number" id="curso-capacidad" class="form-control" value="30" min="1" max="100" required />
+              <div class="form-text">RN02: Valida límite de inscripciones permitidas.</div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+            <button type="submit" class="btn btn-primary-custom">
+              <i class="bi bi-save me-1"></i>Crear Curso
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Asignar Materia a Curso -->
+  <div class="modal fade" id="modal-asignar-materia" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header bg-primary text-white">
+          <h5 class="modal-title"><i class="bi bi-diagram-3 me-2"></i>Asignar Materia al Curso</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+        </div>
+        <form id="form-asignar-materia" novalidate>
+          <div class="modal-body p-4">
+            <div id="modal-asignar-alert"></div>
+            <p class="small text-muted mb-3" id="modal-asignar-curso-desc"></p>
+
+            <div class="mb-3">
+              <label class="form-label fw-semibold" for="asignar-materia-id">Materia <span class="text-danger">*</span></label>
+              <select id="asignar-materia-id" class="form-select" required>
+                <option value="">Seleccione materia activa...</option>
+              </select>
+              <div class="invalid-feedback">Debe seleccionar una materia.</div>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label fw-semibold" for="asignar-docente-id">Docente Asignado (Opcional)</label>
+              <select id="asignar-docente-id" class="form-select">
+                <option value="">Sin docente asignado por ahora</option>
+              </select>
+              <div class="form-text">RN12: El docente asignado podrá calificar y registrar asistencias.</div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+            <button type="submit" class="btn btn-primary-custom">
+              <i class="bi bi-check-circle me-1"></i>Asignar al Curso
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Nuevo Ciclo Lectivo -->
+  <div class="modal fade" id="modal-ciclo" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header bg-primary text-white">
+          <h5 class="modal-title"><i class="bi bi-calendar-check me-2"></i>Nuevo Ciclo Lectivo</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+        </div>
+        <form id="form-ciclo" novalidate>
+          <div class="modal-body p-4">
+            <div id="modal-ciclo-alert"></div>
+
+            <div class="mb-3">
+              <label class="form-label fw-semibold" for="ciclo-anio">Año Académico <span class="text-danger">*</span></label>
+              <input type="number" id="ciclo-anio" class="form-control" placeholder="Ej: 2026" min="2020" max="2050" required />
+            </div>
+
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label class="form-label fw-semibold" for="ciclo-inicio">Fecha Inicio <span class="text-danger">*</span></label>
+                <input type="date" id="ciclo-inicio" class="form-control" required />
+              </div>
+              <div class="col-md-6">
+                <label class="form-label fw-semibold" for="ciclo-fin">Fecha Fin <span class="text-danger">*</span></label>
+                <input type="date" id="ciclo-fin" class="form-control" required />
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+            <button type="submit" class="btn btn-primary-custom">Crear Ciclo</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <div class="container text-center">
+      <small>Instituto Educativo &mdash; Sistema de Gestión Universitaria</small>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="../js/api.js"></script>
+  <script>
+    let cursosList = [];
+    let ciclosList = [];
+    let materiasList = [];
+    let docentesList = [];
+    let cursoActivo = null;
+
+    const modalCurso = new bootstrap.Modal(document.getElementById('modal-curso'));
+    const modalAsignar = new bootstrap.Modal(document.getElementById('modal-asignar-materia'));
+    const modalCiclo = new bootstrap.Modal(document.getElementById('modal-ciclo'));
+
+    async function cargarInicial() {
+      setLoading(true);
+      try {
+        const [cursos, ciclos, materias, docentes] = await Promise.all([
+          CursoAPI.listar(),
+          CicloLectivoAPI.listar(),
+          MateriaAPI.listar(true),
+          DocenteAPI.listar()
+        ]);
+        cursosList = cursos;
+        ciclosList = ciclos;
+        materiasList = materias;
+        docentesList = docentes;
+
+        poblarSelects();
+        renderCursos();
+      } catch (err) {
+        showAlert(document.getElementById('alert-container'), err.message, 'danger');
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    function poblarSelects() {
+      // Filtro ciclo
+      const filtro = document.getElementById('filtro-ciclo');
+      filtro.innerHTML = '<option value="">Todos los ciclos</option>';
+      ciclosList.forEach(c => {
+        filtro.innerHTML += `<option value="${c.idCiclo}">${c.anio} (${c.estado})</option>`;
+      });
+
+      // Select ciclo en modal nuevo curso
+      const selCursoCiclo = document.getElementById('curso-ciclo');
+      selCursoCiclo.innerHTML = '<option value="">Seleccione ciclo lectivo...</option>';
+      ciclosList.forEach(c => {
+        selCursoCiclo.innerHTML += `<option value="${c.idCiclo}">${c.anio}</option>`;
+      });
+
+      // Select materias en modal asignación
+      const selMat = document.getElementById('asignar-materia-id');
+      selMat.innerHTML = '<option value="">Seleccione materia activa...</option>';
+      materiasList.forEach(m => {
+        selMat.innerHTML += `<option value="${m.idMateria}">${escapeHtml(m.nombre)}</option>`;
+      });
+
+      // Select docentes en modal asignación
+      const selDoc = document.getElementById('asignar-docente-id');
+      selDoc.innerHTML = '<option value="">Sin docente asignado por ahora</option>';
+      docentesList.filter(d => d.estado === 'ACTIVO').forEach(d => {
+        selDoc.innerHTML += `<option value="${d.idDocente}">${escapeHtml(d.apellido)}, ${escapeHtml(d.nombre)} (${escapeHtml(d.especialidad || 'General')})</option>`;
+      });
+    }
+
+    function renderCursos() {
+      const cicloFiltro = document.getElementById('filtro-ciclo').value;
+      const filtrados = cicloFiltro
+        ? cursosList.filter(c => c.cicloLectivo && String(c.cicloLectivo.idCiclo) === cicloFiltro)
+        : cursosList;
+
+      const tbody = document.getElementById('tbody-cursos');
+      if (filtrados.length === 0) {
+        renderEmpty(tbody, 4, 'No hay cursos registrados para este filtro');
+        return;
+      }
+
+      tbody.innerHTML = filtrados.map(c => `
+        <tr class="${cursoActivo && cursoActivo.idCurso === c.idCurso ? 'table-primary' : ''}">
+          <td><span class="badge bg-secondary">${c.cicloLectivo ? c.cicloLectivo.anio : '—'}</span></td>
+          <td><strong>${c.anioCursado}° Año "${escapeHtml(c.division)}"</strong></td>
+          <td>${c.capacidadMaxima} alumnos</td>
+          <td class="text-center">
+            <button class="btn btn-sm btn-primary-custom" onclick="seleccionarCurso(${c.idCurso})">
+              <i class="bi bi-eye me-1"></i>Ver Materias
+            </button>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    async function seleccionarCurso(idCurso) {
+      cursoActivo = cursosList.find(c => c.idCurso === idCurso);
+      renderCursos();
+
+      if (!cursoActivo) return;
+
+      document.getElementById('curso-seleccionado-info').className = 'alert alert-info py-2 small mb-3';
+      document.getElementById('curso-seleccionado-info').innerHTML = `
+        <strong>Curso:</strong> ${cursoActivo.anioCursado}° "${escapeHtml(cursoActivo.division)}" (${cursoActivo.cicloLectivo?.anio || ''}) &bull; Capacidad: ${cursoActivo.capacidadMaxima}
+      `;
+      document.getElementById('btn-asignar-materia').classList.remove('d-none');
+
+      setLoading(true);
+      try {
+        const materias = await CursoAPI.materiasPorCurso(idCurso);
+        const tbody = document.getElementById('tbody-materias-curso');
+
+        if (!materias || materias.length === 0) {
+          renderEmpty(tbody, 3, 'Este curso no tiene materias asignadas aún');
+          return;
+        }
+
+        tbody.innerHTML = materias.map(cm => `
+          <tr>
+            <td><strong>#${cm.idCursoMateria}</strong></td>
+            <td><strong>${escapeHtml(cm.materia ? cm.materia.nombre : '—')}</strong></td>
+            <td><small>${cm.docente ? escapeHtml(cm.docente.apellido + ', ' + cm.docente.nombre) : '<em class="text-muted">Sin docente</em>'}</small></td>
+          </tr>
+        `).join('');
+      } catch (err) {
+        showAlert(document.getElementById('alert-container'), err.message, 'danger');
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    document.getElementById('btn-nuevo-curso').addEventListener('click', () => {
+      document.getElementById('form-curso').reset();
+      document.getElementById('curso-capacidad').value = '30';
+      document.getElementById('modal-curso-alert').innerHTML = '';
+      modalCurso.show();
+    });
+
+    document.getElementById('btn-nuevo-ciclo').addEventListener('click', () => {
+      document.getElementById('form-ciclo').reset();
+      document.getElementById('ciclo-anio').value = new Date().getFullYear();
+      document.getElementById('modal-ciclo-alert').innerHTML = '';
+      modalCiclo.show();
+    });
+
+    document.getElementById('btn-asignar-materia').addEventListener('click', () => {
+      if (!cursoActivo) return;
+      document.getElementById('form-asignar-materia').reset();
+      document.getElementById('modal-asignar-curso-desc').textContent =
+        `Asignando asignatura a: ${cursoActivo.anioCursado}° "${cursoActivo.division}" (${cursoActivo.cicloLectivo?.anio || ''})`;
+      document.getElementById('modal-asignar-alert').innerHTML = '';
+      modalAsignar.show();
+    });
+
+    document.getElementById('form-curso').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const alertEl = document.getElementById('modal-curso-alert');
+      alertEl.innerHTML = '';
+
+      const data = {
+        idCiclo: parseInt(document.getElementById('curso-ciclo').value),
+        anioCursado: parseInt(document.getElementById('curso-anio').value),
+        division: document.getElementById('curso-division').value.trim(),
+        capacidadMaxima: parseInt(document.getElementById('curso-capacidad').value),
+      };
+
+      if (!data.idCiclo || !data.anioCursado || !data.division || !data.capacidadMaxima) {
+        showAlert(alertEl, 'Complete todos los campos obligatorios.', 'warning');
+        return;
+      }
+
+      setLoading(true);
+      try {
+        await CursoAPI.crear(data);
+        showAlert(document.getElementById('alert-container'), 'Curso registrado con éxito.', 'success');
+        modalCurso.hide();
+        await cargarInicial();
+      } catch (err) {
+        showAlert(alertEl, err.message, 'danger');
+      } finally {
+        setLoading(false);
+      }
+    });
+
+    document.getElementById('form-asignar-materia').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const alertEl = document.getElementById('modal-asignar-alert');
+      alertEl.innerHTML = '';
+
+      const idMateria = parseInt(document.getElementById('asignar-materia-id').value);
+      const docVal = document.getElementById('asignar-docente-id').value;
+      const idDocente = docVal ? parseInt(docVal) : null;
+
+      if (!idMateria || !cursoActivo) {
+        showAlert(alertEl, 'Seleccione una materia.', 'warning');
+        return;
+      }
+
+      const data = {
+        idCurso: cursoActivo.idCurso,
+        idMateria: idMateria,
+        idDocente: idDocente
+      };
+
+      setLoading(true);
+      try {
+        await CursoAPI.asignarMateria(cursoActivo.idCurso, data);
+        showAlert(document.getElementById('alert-container'), 'Materia asignada al curso con éxito.', 'success');
+        modalAsignar.hide();
+        await seleccionarCurso(cursoActivo.idCurso);
+      } catch (err) {
+        showAlert(alertEl, err.message, 'danger');
+      } finally {
+        setLoading(false);
+      }
+    });
+
+    document.getElementById('form-ciclo').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const alertEl = document.getElementById('modal-ciclo-alert');
+      alertEl.innerHTML = '';
+
+      const data = {
+        anio: parseInt(document.getElementById('ciclo-anio').value),
+        fechaInicio: document.getElementById('ciclo-inicio').value,
+        fechaFin: document.getElementById('ciclo-fin').value,
+      };
+
+      if (!data.anio || !data.fechaInicio || !data.fechaFin) {
+        showAlert(alertEl, 'Complete todos los campos del ciclo.', 'warning');
+        return;
+      }
+
+      setLoading(true);
+      try {
+        await CicloLectivoAPI.crear(data);
+        showAlert(document.getElementById('alert-container'), 'Ciclo lectivo creado exitosamente.', 'success');
+        modalCiclo.hide();
+        await cargarInicial();
+      } catch (err) {
+        showAlert(alertEl, err.message, 'danger');
+      } finally {
+        setLoading(false);
+      }
+    });
+
+    document.getElementById('filtro-ciclo').addEventListener('change', renderCursos);
+
+    cargarInicial();
+  </script>
+</body>
+</html>

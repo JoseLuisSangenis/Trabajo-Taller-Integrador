@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Evaluaciones — Instituto Educativo</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+  <link rel="stylesheet" href="../evaluaciones/evaluaciones.css" />
+</head>
+<body>
+
+  <!-- ===== NAVBAR ===== -->
+  <nav class="navbar navbar-expand-lg navbar-dark navbar-universidad">
+    <div class="container">
+      <a class="navbar-brand d-flex align-items-center gap-2" href="../index.html">
+        <i class="fa-solid fa-graduation-cap fs-4"></i>
+        <span>Instituto Educativo</span>
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="mainNav">
+        <ul class="navbar-nav ms-auto gap-1">
+          <li class="nav-item"><a class="nav-link" href="../index.html"><i class="bi bi-house-door me-1"></i>Inicio</a></li>
+          <li class="nav-item"><a class="nav-link" href="../inscripciones/index.html"><i class="bi bi-person-plus me-1"></i>Inscripciones</a></li>
+          <li class="nav-item"><a class="nav-link" href="../asistencias/index.html"><i class="bi bi-calendar-check me-1"></i>Asistencias</a></li>
+          <li class="nav-item"><a class="nav-link active" href="index.html"><i class="bi bi-journal-text me-1"></i>Evaluaciones</a></li>
+          <li class="nav-item"><a class="nav-link" href="../calificaciones/index.html"><i class="bi bi-star-half me-1"></i>Calificaciones</a></li>
+          <li class="nav-item"><a class="nav-link" href="../alumnos/index.html"><i class="bi bi-people me-1"></i>Alumnos</a></li>
+          <li class="nav-item"><a class="nav-link" href="../matriculas/index.html"><i class="bi bi-receipt me-1"></i>Matrículas</a></li>
+        </ul>
+        <div class="ms-lg-3 mt-2 mt-lg-0" id="navbar-user-info"></div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Page header -->
+  <div class="py-4" style="background:var(--primary)">
+    <div class="container">
+      <h2 class="text-white fw-bold mb-0"><i class="bi bi-journal-text me-2"></i>Gestión de Evaluaciones</h2>
+      <p class="text-white-50 mb-0 small">Crear, consultar y editar instancias de evaluación por curso y materia</p>
+    </div>
+  </div>
+
+  <main class="py-4">
+    <div class="container">
+
+      <!-- Alertas globales -->
+      <div id="alert-container" class="mb-3"></div>
+
+      <div class="row g-4">
+
+        <!-- ===== CARD: NUEVA EVALUACIÓN ===== -->
+        <div class="col-lg-5">
+          <div class="card h-100">
+            <div class="card-header bg-primary-custom d-flex align-items-center gap-2">
+              <i class="bi bi-plus-circle"></i> Nueva Evaluación
+            </div>
+            <div class="card-body">
+              <form id="form-nueva-eval" novalidate>
+
+                <div class="mb-3">
+                  <label class="form-label fw-semibold">CursoMateria ID <span class="text-danger">*</span></label>
+                  <input type="number" id="neval-cursoMateria-id" class="form-control"
+                    placeholder="Ej: 7" min="1" required />
+                  <div class="form-text">ID de la relación CursoMateria (docente asignado a esa materia en ese curso)</div>
+                </div>
+
+                <div class="mb-3">
+                  <label class="form-label fw-semibold">Fecha <span class="text-danger">*</span></label>
+                  <input type="date" id="neval-fecha" class="form-control" required />
+                </div>
+
+                <div class="mb-3">
+                  <label class="form-label fw-semibold">Tipo de Evaluación <span class="text-danger">*</span></label>
+                  <select id="neval-tipo" class="form-select" required>
+                    <option value="" disabled selected>— Seleccione un tipo —</option>
+                    <option value="PRIMER_PARCIAL">1er Parcial</option>
+                    <option value="SEGUNDO_PARCIAL">2do Parcial</option>
+                    <option value="EXAMEN_FINAL">Examen Final</option>
+                    <option value="TRABAJO_PRACTICO">Trabajo Práctico</option>
+                    <option value="RECUPERATORIO">Recuperatorio</option>
+                  </select>
+                </div>
+
+                <div class="mb-3">
+                  <label class="form-label fw-semibold">Descripción</label>
+                  <textarea id="neval-descripcion" class="form-control" rows="2"
+                    placeholder="Descripción opcional..." maxlength="500"></textarea>
+                </div>
+
+                <div id="form-nueva-eval-alert"></div>
+                <button type="submit" class="btn btn-primary-custom w-100">
+                  <i class="bi bi-plus-circle me-2"></i>Crear Evaluación
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <!-- ===== CARD: MODIFICAR EVALUACIÓN ===== -->
+        <div class="col-lg-7">
+          <div class="card h-100">
+            <div class="card-header bg-primary-custom d-flex align-items-center gap-2">
+              <i class="bi bi-pencil-square"></i> Modificar Evaluación
+            </div>
+            <div class="card-body">
+
+              <!-- Cargar por ID -->
+              <div class="row align-items-end g-2 mb-4">
+                <div class="col">
+                  <label class="form-label fw-semibold">ID de la Evaluación a editar</label>
+                  <input type="number" id="edit-eval-id" class="form-control" placeholder="Ej: 12" min="1" />
+                </div>
+                <div class="col-auto">
+                  <button class="btn btn-outline-primary" id="btn-cargar-eval" type="button">
+                    <i class="bi bi-download me-1"></i>Cargar
+                  </button>
+                </div>
+              </div>
+              <div id="edit-load-alert"></div>
+
+              <!-- Formulario de edición (oculto hasta cargar) -->
+              <div id="form-edit-wrap" class="d-none">
+                <hr />
+                <form id="form-edit-eval" novalidate>
+                  <input type="hidden" id="edit-id-hidden" />
+
+                  <div class="row g-3 mb-3">
+                    <div class="col-md-6">
+                      <label class="form-label fw-semibold">Fecha <span class="text-danger">*</span></label>
+                      <input type="date" id="edit-fecha" class="form-control" required />
+                    </div>
+                    <div class="col-md-6">
+                      <label class="form-label fw-semibold">Tipo <span class="text-danger">*</span></label>
+                      <select id="edit-tipo" class="form-select" required>
+                        <option value="PRIMER_PARCIAL">1er Parcial</option>
+                        <option value="SEGUNDO_PARCIAL">2do Parcial</option>
+                        <option value="EXAMEN_FINAL">Examen Final</option>
+                        <option value="TRABAJO_PRACTICO">Trabajo Práctico</option>
+                        <option value="RECUPERATORIO">Recuperatorio</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div class="mb-3">
+                    <label class="form-label fw-semibold">Descripción</label>
+                    <textarea id="edit-descripcion" class="form-control" rows="2" maxlength="500"></textarea>
+                  </div>
+
+                  <div id="form-edit-eval-alert"></div>
+                  <button type="submit" class="btn btn-primary-custom">
+                    <i class="bi bi-save me-2"></i>Guardar Cambios
+                  </button>
+                  <button type="button" class="btn btn-outline-secondary ms-2" id="btn-cancelar-edit">
+                    <i class="bi bi-x me-1"></i>Cancelar
+                  </button>
+                </form>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <!-- ===== CARD: BUSCAR EVALUACIONES ===== -->
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header bg-primary-custom d-flex align-items-center gap-2">
+              <i class="bi bi-search"></i> Buscar Evaluaciones
+            </div>
+            <div class="card-body">
+
+              <!-- Tabs de búsqueda -->
+              <ul class="nav nav-tabs mb-3" id="tabs-busqueda" role="tablist">
+                <li class="nav-item" role="presentation">
+                  <button class="nav-link active" id="tab-curso-btn" data-bs-toggle="tab"
+                    data-bs-target="#tab-curso" type="button" role="tab">
+                    <i class="bi bi-building me-1"></i>Por Curso
+                  </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                  <button class="nav-link" id="tab-cm-btn" data-bs-toggle="tab"
+                    data-bs-target="#tab-cm" type="button" role="tab">
+                    <i class="bi bi-diagram-3 me-1"></i>Por Curso-Materia
+                  </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                  <button class="nav-link" id="tab-id-btn" data-bs-toggle="tab"
+                    data-bs-target="#tab-id" type="button" role="tab">
+                    <i class="bi bi-hash me-1"></i>Por ID
+                  </button>
+                </li>
+              </ul>
+
+              <div class="tab-content mb-3">
+                <!-- Tab Curso -->
+                <div class="tab-pane fade show active" id="tab-curso" role="tabpanel">
+                  <div class="input-group" style="max-width:350px">
+                    <input type="number" id="search-curso-id" class="form-control" placeholder="Curso ID" min="1" />
+                    <button class="btn btn-primary-custom" id="btn-buscar-por-curso" type="button">
+                      <i class="bi bi-search"></i>
+                    </button>
+                  </div>
+                </div>
+                <!-- Tab Curso-Materia -->
+                <div class="tab-pane fade" id="tab-cm" role="tabpanel">
+                  <div class="input-group" style="max-width:350px">
+                    <input type="number" id="search-cm-id" class="form-control" placeholder="CursoMateria ID" min="1" />
+                    <button class="btn btn-primary-custom" id="btn-buscar-por-cm" type="button">
+                      <i class="bi bi-search"></i>
+                    </button>
+                  </div>
+                </div>
+                <!-- Tab ID -->
+                <div class="tab-pane fade" id="tab-id" role="tabpanel">
+                  <div class="input-group" style="max-width:350px">
+                    <input type="number" id="search-eval-id" class="form-control" placeholder="Evaluación ID" min="1" />
+                    <button class="btn btn-primary-custom" id="btn-buscar-por-id" type="button">
+                      <i class="bi bi-search"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <div id="search-alert"></div>
+
+              <!-- Tabla de resultados -->
+              <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>CursoMateria ID</th>
+                      <th>Curso ID</th>
+                      <th>Fecha</th>
+                      <th>Tipo</th>
+                      <th>Descripción</th>
+                      <th>Acciones</th>
+                    </tr>
+                  </thead>
+                  <tbody id="tbody-evaluaciones">
+                    <tr><td colspan="7" class="text-center text-muted py-4">
+                      <i class="bi bi-inbox fs-3 d-block mb-2"></i>Realice una búsqueda para ver resultados
+                    </td></tr>
+                  </tbody>
+                </table>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /row -->
+    </div><!-- /container -->
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container text-center">
+      <small>Instituto Educativo &mdash; Sistema de Gestión Universitaria</small>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="../js/api.js"></script>
+  <script>
+  /* =====================================================
+     EVALUACIONES — Lógica de UI
+     ===================================================== */
+
+  // Fecha por defecto = hoy
+  document.getElementById('neval-fecha').value = new Date().toISOString().split('T')[0];
+
+  /* ---------- FORMULARIO: CREAR EVALUACIÓN ---------- */
+  document.getElementById('form-nueva-eval').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const alertEl = document.getElementById('form-nueva-eval-alert');
+    alertEl.innerHTML = '';
+
+    const cursoMateriaId = parseInt(document.getElementById('neval-cursoMateria-id').value);
+    const fecha          = document.getElementById('neval-fecha').value;
+    const tipo           = document.getElementById('neval-tipo').value;
+    const descripcion    = document.getElementById('neval-descripcion').value.trim() || undefined;
+
+    if (!cursoMateriaId || !fecha || !tipo) {
+      showAlert(alertEl, 'Complete CursoMateria ID, Fecha y Tipo.', 'warning');
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const nueva = await EvaluacionAPI.crear({
+        cursoMateriaId, fecha, tipo,
+        ...(descripcion ? { descripcion } : {}),
+      });
+      showAlert(document.getElementById('alert-container'),
+        `✅ Evaluación creada. ID: ${nueva.id} — Tipo: ${nueva.tipo} — Fecha: ${formatDate(nueva.fecha)}`, 'success');
+      document.getElementById('form-nueva-eval').reset();
+      document.getElementById('neval-fecha').value = new Date().toISOString().split('T')[0];
+    } catch (err) {
+      showAlert(alertEl, err.message, 'danger');
+    } finally {
+      setLoading(false);
+    }
+  });
+
+  /* ---------- CARGAR EVALUACIÓN PARA EDITAR ---------- */
+  document.getElementById('btn-cargar-eval').addEventListener('click', async () => {
+    const id = parseInt(document.getElementById('edit-eval-id').value);
+    const alertEl = document.getElementById('edit-load-alert');
+    if (!id) { showAlert(alertEl, 'Ingrese un ID de evaluación válido.', 'warning'); return; }
+    alertEl.innerHTML = '';
+
+    setLoading(true);
+    try {
+      const eval_ = await EvaluacionAPI.porId(id);
+      // Rellenar formulario de edición
+      document.getElementById('edit-id-hidden').value   = eval_.id;
+      document.getElementById('edit-fecha').value       = eval_.fecha?.split('T')[0] || '';
+      document.getElementById('edit-tipo').value        = eval_.tipo;
+      document.getElementById('edit-descripcion').value = eval_.descripcion || '';
+      document.getElementById('form-edit-wrap').classList.remove('d-none');
+      document.getElementById('form-edit-eval-alert').innerHTML = '';
+    } catch (err) {
+      showAlert(alertEl, err.message, 'danger');
+    } finally {
+      setLoading(false);
+    }
+  });
+
+  /* ---------- GUARDAR CAMBIOS DE EDICIÓN ---------- */
+  document.getElementById('form-edit-eval').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const alertEl = document.getElementById('form-edit-eval-alert');
+    alertEl.innerHTML = '';
+
+    const id          = parseInt(document.getElementById('edit-id-hidden').value);
+    const fecha       = document.getElementById('edit-fecha').value;
+    const tipo        = document.getElementById('edit-tipo').value;
+    const descripcion = document.getElementById('edit-descripcion').value.trim() || undefined;
+
+    if (!fecha || !tipo) {
+      showAlert(alertEl, 'Fecha y Tipo son obligatorios.', 'warning');
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const actualizada = await EvaluacionAPI.actualizar(id, {
+        fecha, tipo, ...(descripcion ? { descripcion } : {}),
+      });
+      showAlert(document.getElementById('alert-container'),
+        `✅ Evaluación #${id} actualizada correctamente.`, 'success');
+      document.getElementById('form-edit-wrap').classList.add('d-none');
+      document.getElementById('edit-eval-id').value = '';
+    } catch (err) {
+      showAlert(alertEl, err.message, 'danger');
+    } finally {
+      setLoading(false);
+    }
+  });
+
+  /* ---------- CANCELAR EDICIÓN ---------- */
+  document.getElementById('btn-cancelar-edit').addEventListener('click', () => {
+    document.getElementById('form-edit-wrap').classList.add('d-none');
+    document.getElementById('edit-eval-id').value = '';
+    document.getElementById('edit-load-alert').innerHTML = '';
+  });
+
+  /* ---------- BUSCAR POR CURSO ---------- */
+  document.getElementById('btn-buscar-por-curso').addEventListener('click', async () => {
+    const id = parseInt(document.getElementById('search-curso-id').value);
+    if (!id) { showAlert(document.getElementById('search-alert'), 'Ingrese un Curso ID válido.', 'warning'); return; }
+    document.getElementById('search-alert').innerHTML = '';
+    setLoading(true);
+    try {
+      const lista = await EvaluacionAPI.porCurso(id);
+      renderTablaEvaluaciones(lista);
+    } catch (err) {
+      showAlert(document.getElementById('search-alert'), err.message, 'danger');
+    } finally {
+      setLoading(false);
+    }
+  });
+
+  /* ---------- BUSCAR POR CURSO-MATERIA ---------- */
+  document.getElementById('btn-buscar-por-cm').addEventListener('click', async () => {
+    const id = parseInt(document.getElementById('search-cm-id').value);
+    if (!id) { showAlert(document.getElementById('search-alert'), 'Ingrese un CursoMateria ID válido.', 'warning'); return; }
+    document.getElementById('search-alert').innerHTML = '';
+    setLoading(true);
+    try {
+      const lista = await EvaluacionAPI.porCursoMateria(id);
+      renderTablaEvaluaciones(lista);
+    } catch (err) {
+      showAlert(document.getElementById('search-alert'), err.message, 'danger');
+    } finally {
+      setLoading(false);
+    }
+  });
+
+  /* ---------- BUSCAR POR ID ---------- */
+  document.getElementById('btn-buscar-por-id').addEventListener('click', async () => {
+    const id = parseInt(document.getElementById('search-eval-id').value);
+    if (!id) { showAlert(document.getElementById('search-alert'), 'Ingrese un ID de evaluación válido.', 'warning'); return; }
+    document.getElementById('search-alert').innerHTML = '';
+    setLoading(true);
+    try {
+      const eval_ = await EvaluacionAPI.porId(id);
+      renderTablaEvaluaciones([eval_]); // siempre devuelve objeto, envolver en array
+    } catch (err) {
+      showAlert(document.getElementById('search-alert'), err.message, 'danger');
+    } finally {
+      setLoading(false);
+    }
+  });
+
+  /* ---------- EDITAR INLINE DESDE TABLA ---------- */
+  document.getElementById('tbody-evaluaciones').addEventListener('click', (e) => {
+    const btn = e.target.closest('[data-action="editar-eval"]');
+    if (!btn) return;
+    const id = btn.dataset.id;
+    // Poner el ID en el input y disparar carga
+    document.getElementById('edit-eval-id').value = id;
+    document.getElementById('btn-cargar-eval').click();
+    // Scroll hacia la sección de edición
+    document.getElementById('edit-eval-id').scrollIntoView({ behavior: 'smooth', block: 'center' });
+  });
+
+  /* ---------- RENDER TABLA ---------- */
+  function renderTablaEvaluaciones(lista) {
+    const tbody = document.getElementById('tbody-evaluaciones');
+    if (!lista || lista.length === 0) {
+      renderEmpty(tbody, 7, 'No se encontraron evaluaciones');
+      return;
+    }
+    tbody.innerHTML = lista.map(ev => `
+      <tr>
+        <td><strong>#${escapeHtml(String(ev.id))}</strong></td>
+        <td>${escapeHtml(String(ev.cursoMateriaId))}</td>
+        <td>${escapeHtml(String(ev.cursoId ?? '—'))}</td>
+        <td>${formatDate(ev.fecha)}</td>
+        <td>${badgeTipoEvaluacion(ev.tipo)}</td>
+        <td class="text-muted small">${escapeHtml(ev.descripcion || '—')}</td>
+        <td>
+          <button class="btn btn-sm btn-outline-primary" data-action="editar-eval" data-id="${ev.id}">
+            <i class="bi bi-pencil me-1"></i>Editar
+          </button>
+        </td>
+      </tr>`).join('');
+  }
+
+  /* ---------- Enter en búsquedas ---------- */
+  document.getElementById('search-curso-id').addEventListener('keydown', e => {
+    if (e.key === 'Enter') document.getElementById('btn-buscar-por-curso').click();
+  });
+  document.getElementById('search-cm-id').addEventListener('keydown', e => {
+    if (e.key === 'Enter') document.getElementById('btn-buscar-por-cm').click();
+  });
+  document.getElementById('search-eval-id').addEventListener('keydown', e => {
+    if (e.key === 'Enter') document.getElementById('btn-buscar-por-id').click();
+  });
+  document.getElementById('edit-eval-id').addEventListener('keydown', e => {
+    if (e.key === 'Enter') document.getElementById('btn-cargar-eval').click();
+  });
+  </script>
+</body>
+</html>
